@@ -1,0 +1,83 @@
+syntax = "proto3";
+
+package AuthService;
+
+option go_package = "https://gitlab.com/vallenshtain-iii/auth-service/grpc/genproto/AuthService";
+
+import "google/protobuf/timestamp.proto";
+
+service AuthService {
+    rpc Register(RegisterRequest) returns (RegisterResponse);
+    rpc Login(LoginRequest) returns (LoginResponse);
+    rpc UpdatePassword(UpdatePasswordRequest) returns (UpdatePasswordResponse);
+
+    // Методы для работы с jwt
+    rpc Validate(ValidateRequest) returns (ValidateResponse);
+    rpc NewJwt(NewJwtRequest) returns (NewJwtResponse);
+    rpc RevokeJwt(RevokeJwtRequest) returns (RevokeJwtResponse);
+    rpc Refresh(RefreshRequest) returns (RefreshResponse);
+}
+
+message RegisterRequest {
+    string username = 1;
+    string password = 2;
+    string email = 3;
+}
+
+message RegisterResponse {}
+
+message LoginRequest {
+    string username = 1;
+    string password = 2;
+}
+
+message LoginResponse {
+    string access_token = 1;
+    string refresh_token = 2;
+}
+
+message UpdatePasswordRequest {
+    int64 user_id = 1;
+    string password = 2;
+    string new_password = 3;
+}
+
+message UpdatePasswordResponse {}
+
+
+message ValidateRequest {
+    string access_token = 1;
+}
+
+message ValidateResponse {
+    int64 user_id = 1;
+}
+
+message NewJwtRequest {
+    int64 user_id = 1;
+}
+
+message NewJwtResponse {
+    string access_token = 1;
+    string refresh_token = 2;
+}
+
+message RevokeJwtRequest {
+    int64 user_id = 1;
+}
+
+message RevokeJwtResponse {}
+
+message RefreshRequest{
+    string access_token = 1;
+    string refresh_token = 2;
+}
+
+message RefreshResponse {
+    string access_token = 1;
+    string refresh_token = 2;
+}
+
+message Err {
+    google.protobuf.Timestamp expiration_time = 1;
+}
